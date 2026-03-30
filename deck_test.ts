@@ -1,6 +1,5 @@
 import { assertEquals } from "@std/assert";
 import { Deck } from "./deck.ts";
-import { Rank, Suit } from "./cards.ts";
 
 Deno.test("deck contains 36 cards", () => {
   const deck = new Deck();
@@ -15,10 +14,10 @@ Deno.test("play removes card from unplayed", () => {
   assertEquals(deck.getPlayedCount(), 1);
 });
 
-Deno.test("play returns undefined when deck empty", () => {
+Deno.test("play returns null when deck empty", () => {
   const deck = new Deck();
   for (let i = 0; i < 36; i++) deck.play();
-  assertEquals(deck.play(), undefined);
+  assertEquals(deck.play(), null);
 });
 
 Deno.test("reset restores deck", () => {

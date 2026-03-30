@@ -29,8 +29,8 @@ export class Deck {
         }
     }
 
-    play(): Card | undefined {
-        if (this.unplayed.length === 0) return undefined;
+    play(): Card | null {
+        if (this.unplayed.length === 0) return null;
         const card = this.unplayed.pop()!;
         this.played.push(card);
         return card;
