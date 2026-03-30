@@ -22,7 +22,7 @@ export class Deck {
         return cards;
     }
 
-    private shuffle(): void {
+    shuffle(): void {
         for (let i = this.unplayed.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [this.unplayed[i], this.unplayed[j]] = [this.unplayed[j], this.unplayed[i]];
