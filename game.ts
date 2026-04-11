@@ -20,6 +20,7 @@ export class Game {
   public playGame(): number {
     this.setStartingValues();
     while (this.deck.getUnplayedCount() > 0 && this.balance > 0) {
+      console.clear();
       this.playedCard = this.nextCard ?? this.deck.play();
       if (this.playedCard) {
         this.showCard(this.playedCard);
@@ -40,6 +41,7 @@ export class Game {
           }
           this.playedCard = this.nextCard;
         }
+        this.promptFn("Drücke Enter um fortzufahren...");
       }
     }
     console.log(`Spiel beendet. Geld: ${this.balance.toFixed(2)}`);
@@ -71,7 +73,6 @@ export class Game {
         "Wird die nächste Karte höher(h) oder tiefer(t)?",
       );
       if (this.bet !== "h" && this.bet !== "t") {
-        console.clear();
         if (this.playedCard) this.showCard(this.playedCard);
         console.log("Bitte entweder 'h' oder 't' eingeben");
       }

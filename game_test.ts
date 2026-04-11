@@ -84,13 +84,13 @@ Deno.test("game runs once per card pair until deck is empty", () => {
   game.playGame();
 
   // Assert
-  assertEquals(callCount, 5);
+  assertEquals(callCount, 5 * 2); // 5 pairs, each requires a bet and an enter
 });
 
 Deno.test("invalid input is re-prompted until valid", () => {
   // Arrange
   const deck = new MockDeck([low, high]);
-  const inputs = ["x", "foo", "h"]; // two invalid, then valid
+  const inputs = ["x", "skip", "foo", "skip", "h", "skip"]; // two invalid, then valid + skips for enters
   let callCount = 0;
   const game = new Game(deck, () => inputs[callCount++] ?? "h");
 
@@ -98,7 +98,7 @@ Deno.test("invalid input is re-prompted until valid", () => {
   game.playGame();
 
   // Assert
-  assertEquals(callCount, 3);
+  assertEquals(callCount, 6);
 });
 
 Deno.test("game runs once per card pair until balance is 0", () => {
