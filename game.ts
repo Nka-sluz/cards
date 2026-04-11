@@ -4,20 +4,22 @@ import { Deck } from "./deck.ts";
 export class Game {
   private playedCard: Card | null = null;
   private nextCard: Card | null = null;
-  private points: number = 0;
   private deck: Deck;
   private bet: string | null = null;
+  private balance: number = 0;
 
   constructor(
     private injectedDeck?: Deck,
     private promptFn: (msg: string) => string | null = (msg) => prompt(msg),
+    startingBalance?: number
   ) {
     this.deck = injectedDeck ?? new Deck();
+    this.balance = startingBalance ?? 1.0;
   }
 
-  public playGame(): boolean {
+  public playGame(): number {
     this.setStartingValues();
-    while (this.deck.getUnplayedCount() > 0) {
+    while (this.deck.getUnplayedCount() > 0 && this.balance > 0) {
       this.playedCard = this.nextCard ?? this.deck.play();
       if (this.playedCard) {
         this.showCard(this.playedCard);
@@ -32,7 +34,7 @@ export class Game {
             (this.bet === "t" && !isHigher)
           ) {
             console.log("Richtig!");
-            this.points++;
+            this.changeBalance(0.1);
           } else {
             console.log("Falsch");
           }
@@ -40,14 +42,16 @@ export class Game {
         }
       }
     }
-    console.log(`Spiel beendet. Punkte: ${this.points}`);
-    return true;
+    console.log(`Spiel beendet. Geld: ${this.balance.toFixed(2)}`);
+    return this.balance;
   }
 
   private setStartingValues() {
     this.playedCard = null;
     this.nextCard = null;
-    this.points = 0;
+    if (this.balance <= 0) {
+      this.balance = 1.0;
+    }
     if (this.injectedDeck) {
       this.deck = this.injectedDeck;
       this.deck.shuffle();
@@ -71,6 +75,15 @@ export class Game {
         if (this.playedCard) this.showCard(this.playedCard);
         console.log("Bitte entweder 'h' oder 't' eingeben");
       }
+    }
+    this.changeBalance(-0.05);
+  }
+
+  private changeBalance(amount: number) {
+    this.balance += amount;
+    if (this.balance <= 0) {
+      this.balance = 0;
+      console.log("Du hast kein Geld mehr. Spiel vorbei.");
     }
   }
 }
